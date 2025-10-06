@@ -1,7 +1,7 @@
 /**
  * @file background.js
  * @description Service Worker for Duo Dictionary Lookup.
- * v3.0.0: Handles two distinct actions: Cambridge popup and WordReference new tab.
+ * v3.1.0: Adds WordReference to the context menu for better PDF viewer support.
  */
 
 const DEFAULT_OPTIONS = {
@@ -16,6 +16,13 @@ chrome.runtime.onInstalled.addListener(() => {
         title: "Chercher \"%s\" sur Cambridge Dictionary",
         contexts: ["selection"]
     });
+
+    chrome.contextMenus.create({
+        id: "lookup-wordreference-ctx",
+        title: "Chercher \"%s\" sur WordReference",
+        contexts: ["selection"]
+    });
+
     chrome.storage.sync.get(null, (items) => {
         if (Object.keys(items).length === 0) {
             chrome.storage.sync.set(DEFAULT_OPTIONS);
@@ -31,6 +38,8 @@ chrome.commands.onCommand.addListener(handleCommand);
 function handleContextMenuClick(info, tab) {
     if (info.menuItemId === "lookup-cambridge-ctx" && info.selectionText) {
         processCambridgeRequest(info.selectionText, tab);
+    } else if (info.menuItemId === "lookup-wordreference-ctx" && info.selectionText) {
+        processWordReferenceRequest(info.selectionText, tab);
     }
 }
 

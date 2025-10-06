@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Duo Dictionary Lookup",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Cherchez un mot sur Cambridge Dictionary (popup) ou WordReference (nouvel onglet).",
   "permissions": [
     "contextMenus",
@@ -24,8 +24,8 @@
   "commands": {
     "lookup-cambridge": {
       "suggested_key": {
-        "default": "Ctrl+Shift+Y",
-        "mac": "Command+Shift+Y"
+        "default": "Ctrl+Shift+C",
+        "mac": "Command+Shift+C"
       },
       "description": "Chercher sur Cambridge Dictionary (dans le pop-up)"
     },
