@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "WordReference Lookup",
-  "version": "1.0.1",
-  "description": "Sélectionnez un mot pour le rechercher rapidement sur WordReference dans un pop-up ou un onglet.",
+  "version": "2.0.0",
+  "description": "Sélectionnez un mot pour le rechercher rapidement sur WordReference dans un pop-up.",
   "permissions": [
     "contextMenus",
     "scripting",
@@ -16,27 +16,18 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "WordReference Lookup"
+    "default_title": "WordReference Lookup",
+    "default_popup": "popup/popup.html"
   },
   "options_page": "options/options.html",
   "commands": {
     "lookup-selection": {
       "suggested_key": {
-        "default": "Ctrl+Shift+Y",
-        "mac": "Command+Shift+Y"
+        "default": "Alt+Y",
+        "mac": "Alt+Y"
       },
       "description": "Rechercher la sélection sur WordReference"
     }
-  },
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "content/modal.html",
-        "content/modal.css"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
-    }
-  ]
+  }
 }
+
