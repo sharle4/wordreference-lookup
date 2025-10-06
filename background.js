@@ -1,7 +1,7 @@
 /**
  * @file background.js
  * @description Service Worker for Duo Dictionary Lookup.
- * v3.3.0: Reverts context menu to top-level for quicker access.
+ * v3.1.2: Reverts context menu to top-level for quicker access.
  */
 
 const DEFAULT_OPTIONS = {
@@ -11,12 +11,6 @@ const DEFAULT_OPTIONS = {
 
 // --- Initialization ---
 chrome.runtime.onInstalled.addListener(() => {
-    chrome.contextMenus.create({
-        id: "lookup-cambridge-ctx",
-        title: "Chercher \"%s\" sur Cambridge Dictionary",
-        contexts: ["selection"]
-    });
-
     chrome.contextMenus.create({
         id: "lookup-wordreference-ctx",
         title: "Chercher \"%s\" sur WordReference",
@@ -63,18 +57,6 @@ function handleCommand(command, tab) {
 }
 
 // --- Core Logic ---
-
-async function processCambridgeRequest(text, tab) {
-    const sanitizedText = text.trim();
-    if (!sanitizedText) return;
-
-    const options = await getOptions();
-    const lookupUrl = `https://dictionary.cambridge.org/dictionary/${options.cambridgeLangPair}/${encodeURIComponent(sanitizedText)}`;
-
-    await chrome.storage.local.set({ lastCambridgeUrl: lookupUrl });
-    chrome.action.openPopup();
-}
-
 async function processWordReferenceRequest(text, tab) {
     const sanitizedText = text.trim();
     if (!sanitizedText) return;
