@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Options WordReference Lookup</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; background-color: #f9f9f9; color: #333; }
+        h1 { color: #0056b3; border-bottom: 2px solid #ccc; padding-bottom: 10px;}
+        .option-group { margin-bottom: 25px; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+        select, input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .size-inputs { display: flex; gap: 10px; }
+        .size-inputs div { flex: 1; }
+        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; transition: background-color 0.2s; }
+        button:hover { background-color: #0056b3; }
+        #status { margin-top: 15px; color: green; font-weight: bold; opacity: 0; transition: opacity 0.5s; }
+        .shortcut-info { margin-top: 20px; font-size: 14px; background-color: #eef; padding: 15px; border-radius: 4px; border-left: 4px solid #007bff;}
+        .shortcut-info a { color: #0056b3; text-decoration: none; }
+        .shortcut-info a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <h1>Paramètres - WordReference Lookup</h1>
+
+    <form id="options-form">
+        <div class="option-group">
+            <label for="langPair">Paire de langues :</label>
+            <select id="langPair">
+                <option value="enfr">Anglais → Français</option>
+                <option value="fren">Français → Anglais</option>
+                <option value="enes">Anglais → Espagnol</option>
+                <option value="esen">Espagnol → Anglais</option>
+                <option value="enit">Anglais → Italien</option>
+                <option value="iten">Italien → Anglais</option>
+                <option value="ende">Anglais → Allemand</option>
+                <option value="deen">Allemand → Anglais</option>
+            </select>
+        </div>
+
+        <div class="option-group">
+            <label for="displayMode">Afficher le résultat dans :</label>
+            <select id="displayMode">
+                <option value="iframe">Un pop-up sur la page (recommandé)</option>
+                <option value="popup">Une nouvelle fenêtre pop-up</option>
+                <option value="tab">Un nouvel onglet</option>
+            </select>
+        </div>
+
+        <div class="option-group">
+            <label>Taille du pop-up / de la fenêtre :</label>
+            <div class="size-inputs">
+                 <div>
+                    <label for="modalWidth">Largeur (px)</label>
+                    <input type="number" id="modalWidth" min="300" max="2000" step="10">
+                 </div>
+                 <div>
+                    <label for="modalHeight">Hauteur (px)</label>
+                    <input type="number" id="modalHeight" min="300" max="2000" step="10">
+                 </div>
+            </div>
+        </div>
+        
+        <button type="submit">Enregistrer</button>
+        <div id="status"></div>
+    </form>
+
+    <div class="shortcut-info">
+        Pour modifier le raccourci clavier (actuellement <strong>Ctrl+Shift+W</strong> ou <strong>Cmd+Shift+W</strong>), rendez-vous sur la page des raccourcis de Chrome :
+        <a href="chrome://extensions/shortcuts" target="_blank">chrome://extensions/shortcuts</a>
+    </div>
+
+    <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{
+  "manifest_version": 3,
+  "name": "WordReference Lookup",
+  "version": "1.0.0",
+  "description": "Sélectionnez un mot pour le rechercher rapidement sur WordReference dans un pop-up ou un onglet.",
+  "permissions": [
+    "contextMenus",
+    "scripting",
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://www.wordreference.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png"
+    },
+    "default_title": "WordReference Lookup"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "options_page": "options/options.html",
+  "commands": {
+    "lookup-selection": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
+      },
+      "description": "Rechercher la sélection sur WordReference"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content/modal.html",
+        "content/modal.css"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}
