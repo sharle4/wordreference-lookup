@@ -1,7 +1,7 @@
 /**
  * @file background.js
  * @description Service Worker for Duo Dictionary Lookup.
- * v3.1.0: Adds WordReference to the context menu for better PDF viewer support.
+ * v3.3.0: Reverts context menu to top-level for quicker access.
  */
 
 const DEFAULT_OPTIONS = {
