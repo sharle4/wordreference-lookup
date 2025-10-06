@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Options WordReference Lookup</title>
+    <title>Options Duo Dictionary Lookup</title>
     <meta charset="UTF-8">
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; background-color: #f9f9f9; color: #333; }
         h1 { color: #0056b3; border-bottom: 2px solid #ccc; padding-bottom: 10px;}
         .option-group { margin-bottom: 25px; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { margin-top: 0; font-size: 1.1em; color: #d00027; }
+        h2.wr { color: #007bff; }
         label { display: block; margin-bottom: 8px; font-weight: bold; }
         select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; transition: background-color 0.2s; }
@@ -15,34 +17,48 @@
         .shortcut-info { margin-top: 20px; font-size: 14px; background-color: #eef; padding: 15px; border-radius: 4px; border-left: 4px solid #007bff;}
         .shortcut-info a { color: #0056b3; text-decoration: none; }
         .shortcut-info a:hover { text-decoration: underline; }
+        .shortcut-info p { margin: 0 0 10px 0; }
     </style>
 </head>
 <body>
 
-    <h1>Paramètres - WordReference Lookup</h1>
+    <h1>Paramètres - Duo Dictionary Lookup</h1>
 
     <form id="options-form">
         <div class="option-group">
-            <label for="langPair">Paire de langues par défaut :</label>
-            <select id="langPair">
+            <h2>Cambridge Dictionary (Pop-up)</h2>
+            <label for="cambridgeLangPair">Paire de langues :</label>
+            <select id="cambridgeLangPair">
+                <option value="english-french">Anglais → Français</option>
+                <option value="french-english">Français → Anglais</option>
+                <option value="english-spanish">Anglais → Espagnol</option>
+                <option value="spanish-english">Espagnol → Anglais</option>
+                 <option value="english">Anglais (Définitions)</option>
+            </select>
+        </div>
+        
+        <div class="option-group">
+            <h2 class="wr">WordReference (Nouvel Onglet)</h2>
+            <label for="wordrefLangPair">Paire de langues :</label>
+            <select id="wordrefLangPair">
                 <option value="enfr">Anglais → Français</option>
                 <option value="fren">Français → Anglais</option>
                 <option value="enes">Anglais → Espagnol</option>
                 <option value="esen">Espagnol → Anglais</option>
                 <option value="enit">Anglais → Italien</option>
                 <option value="iten">Italien → Anglais</option>
-                <option value="ende">Anglais → Allemand</option>
-                <option value="deen">Allemand → Anglais</option>
             </select>
         </div>
-        
+
         <button type="submit">Enregistrer</button>
         <div id="status"></div>
     </form>
 
     <div class="shortcut-info">
-        Pour modifier le raccourci clavier (par défaut <strong>Ctrl+Shift+W</strong> ou <strong>Cmd+Shift+W</strong>), rendez-vous sur la page des raccourcis de Chrome :
-        <a href="chrome://extensions/shortcuts" target="_blank">chrome://extensions/shortcuts</a>
+        <p>Pour modifier les raccourcis clavier, rendez-vous sur :
+        <a href="chrome://extensions/shortcuts" target="_blank">chrome://extensions/shortcuts</a></p>
+        <p>• <strong>Cambridge (Pop-up):</strong> par défaut <strong>Ctrl+Shift+W</strong></p>
+        <p>• <strong>WordReference (Onglet):</strong> par défaut <strong>Ctrl+Shift+X</strong></p>
     </div>
 
     <script src="options.js"></script>

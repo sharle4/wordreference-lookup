@@ -1,19 +1,19 @@
 /**
  * @file background.js
- * @description Service Worker for the WordReference Lookup extension.
- * Handles context menu creation, command listeners, and orchestrates the lookup process.
+ * @description Service Worker for Duo Dictionary Lookup.
+ * v3.0.0: Handles two distinct actions: Cambridge popup and WordReference new tab.
  */
 
-// --- Default Settings ---
 const DEFAULT_OPTIONS = {
-    langPair: 'enfr'
+    cambridgeLangPair: 'english-french',
+    wordrefLangPair: 'enfr',
 };
 
 // --- Initialization ---
 chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
-        id: "wordreference-lookup",
-        title: "Chercher \"%s\" sur WordReference",
+        id: "lookup-cambridge-ctx",
+        title: "Chercher \"%s\" sur Cambridge Dictionary",
         contexts: ["selection"]
     });
     chrome.storage.sync.get(null, (items) => {
@@ -28,63 +28,54 @@ chrome.contextMenus.onClicked.addListener(handleContextMenuClick);
 chrome.commands.onCommand.addListener(handleCommand);
 
 // --- Event Handlers ---
-
-/**
- * Handles clicks on the context menu item.
- * @param {object} info - Information about the clicked menu item.
- * @param {object} tab - The tab where the click occurred.
- */
 function handleContextMenuClick(info, tab) {
-    if (info.menuItemId === "wordreference-lookup" && info.selectionText) {
-        processLookupRequest(info.selectionText, tab);
+    if (info.menuItemId === "lookup-cambridge-ctx" && info.selectionText) {
+        processCambridgeRequest(info.selectionText, tab);
     }
 }
 
-/**
- * Handles keyboard shortcut commands.
- * @param {string} command - The name of the command that was executed.
- * @param {object} tab - The tab where the command was executed.
- */
 function handleCommand(command, tab) {
-    if (command === "lookup-selection") {
-        chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            function: getSelectionOrWordUnderCursor
-        }, (injectionResults) => {
-            if (chrome.runtime.lastError) {
-                console.warn(`Could not get selection programmatically: ${chrome.runtime.lastError.message}`);
-                return;
-            }
-            if (injectionResults && injectionResults[0] && injectionResults[0].result) {
-                processLookupRequest(injectionResults[0].result, tab);
-            }
-        });
-    }
+    chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        function: getSelectionOrWordUnderCursor
+    }, (injectionResults) => {
+        if (chrome.runtime.lastError || !injectionResults || !injectionResults[0] || !injectionResults[0].result) {
+            console.warn(`Could not get selection programmatically.`);
+            return;
+        }
+        const selectedText = injectionResults[0].result;
+        
+        if (command === "lookup-cambridge") {
+            processCambridgeRequest(selectedText, tab);
+        } else if (command === "lookup-wordreference-tab") {
+            processWordReferenceRequest(selectedText, tab);
+        }
+    });
 }
 
 // --- Core Logic ---
 
-/**
- * Stores the selected text's URL and opens the action popup.
- * @param {string} text - The text to look up.
- * @param {object} tab - The active tab.
- */
-async function processLookupRequest(text, tab) {
+async function processCambridgeRequest(text, tab) {
     const sanitizedText = text.trim();
     if (!sanitizedText) return;
 
     const options = await getOptions();
-    const lookupUrl = `https://www.wordreference.com/${options.langPair}/${encodeURIComponent(sanitizedText)}`;
+    const lookupUrl = `https://dictionary.cambridge.org/dictionary/${options.cambridgeLangPair}/${encodeURIComponent(sanitizedText)}`;
 
-    await chrome.storage.local.set({ lastUrl: lookupUrl });
-
+    await chrome.storage.local.set({ lastCambridgeUrl: lookupUrl });
     chrome.action.openPopup();
 }
 
-/**
- * Retrieves user options from storage, falling back to defaults.
- * @returns {Promise<object>} A promise that resolves with the user's options.
- */
+async function processWordReferenceRequest(text, tab) {
+    const sanitizedText = text.trim();
+    if (!sanitizedText) return;
+
+    const options = await getOptions();
+    const lookupUrl = `https://www.wordreference.com/${options.wordrefLangPair}/${encodeURIComponent(sanitizedText)}`;
+
+    chrome.tabs.create({ url: lookupUrl });
+}
+
 function getOptions() {
     return new Promise((resolve) => {
         chrome.storage.sync.get(DEFAULT_OPTIONS, (items) => {
@@ -93,33 +84,6 @@ function getOptions() {
     });
 }
 
-/**
- * This function is injected into the page to get the selected text.
- * @returns {string} The selected text or the word under the cursor.
- */
 function getSelectionOrWordUnderCursor() {
-    const selection = window.getSelection();
-    let text = selection.toString().trim();
-
-    if (text) {
-        return text;
-    }
-
-    if (selection.rangeCount > 0) {
-        const range = selection.getRangeAt(0);
-        if (range.collapsed) {
-            let node = range.startContainer;
-            if (node.nodeType === Node.TEXT_NODE) {
-                const textContent = node.textContent;
-                const start = range.startOffset;
-                let wordStart = textContent.lastIndexOf(' ', start) + 1;
-                let wordEnd = textContent.indexOf(' ', start);
-                if (wordEnd === -1) {
-                    wordEnd = textContent.length;
-                }
-                text = textContent.substring(wordStart, wordEnd).replace(/[^a-zA-Z0-9'-]/g, '');
-            }
-        }
-    }
-    return text;
+    return window.getSelection().toString().trim();
 }

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "WordReference Lookup",
-  "version": "2.0.0",
-  "description": "Sélectionnez un mot pour le rechercher rapidement sur WordReference dans un pop-up.",
+  "name": "Duo Dictionary Lookup",
+  "version": "3.0.0",
+  "description": "Cherchez un mot sur Cambridge Dictionary (popup) ou WordReference (nouvel onglet).",
   "permissions": [
     "contextMenus",
     "scripting",
@@ -10,24 +10,31 @@
     "activeTab"
   ],
   "host_permissions": [
+    "https://dictionary.cambridge.org/*",
     "https://www.wordreference.com/*"
   ],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "WordReference Lookup",
+    "default_title": "Duo Dictionary Lookup",
     "default_popup": "popup/popup.html"
   },
   "options_page": "options/options.html",
   "commands": {
-    "lookup-selection": {
+    "lookup-cambridge": {
       "suggested_key": {
-        "default": "Alt+Y",
-        "mac": "Alt+Y"
+        "default": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
       },
-      "description": "Rechercher la sélection sur WordReference"
+      "description": "Chercher sur Cambridge Dictionary (dans le pop-up)"
+    },
+    "lookup-wordreference-tab": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+X",
+        "mac": "Command+Shift+X"
+      },
+      "description": "Chercher sur WordReference (nouvel onglet)"
     }
   }
 }
-

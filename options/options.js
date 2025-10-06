@@ -1,15 +1,16 @@
 /**
  * @file options.js
  * @description Handles logic for the extension's options page.
- * Saves and restores settings from chrome.storage.sync.
  */
 
 const saveOptions = (e) => {
     e.preventDefault();
-    const langPair = document.getElementById('langPair').value;
+    const cambridgeLangPair = document.getElementById('cambridgeLangPair').value;
+    const wordrefLangPair = document.getElementById('wordrefLangPair').value;
 
     chrome.storage.sync.set({
-        langPair,
+        cambridgeLangPair,
+        wordrefLangPair
     }, () => {
         const status = document.getElementById('status');
         status.textContent = 'Paramètres enregistrés.';
@@ -23,11 +24,13 @@ const saveOptions = (e) => {
 
 const restoreOptions = () => {
     const defaults = {
-        langPair: 'enfr'
+        cambridgeLangPair: 'english-french',
+        wordrefLangPair: 'enfr'
     };
 
     chrome.storage.sync.get(defaults, (items) => {
-        document.getElementById('langPair').value = items.langPair;
+        document.getElementById('cambridgeLangPair').value = items.cambridgeLangPair;
+        document.getElementById('wordrefLangPair').value = items.wordrefLangPair;
     });
 };
 

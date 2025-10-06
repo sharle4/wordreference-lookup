@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const iframe = document.getElementById('wr-iframe');
+    const iframe = document.getElementById('lookup-iframe');
     const spinner = document.getElementById('spinner');
     const container = document.getElementById('container');
 
-    const data = await chrome.storage.local.get('lastUrl');
+    const data = await chrome.storage.local.get('lastCambridgeUrl');
 
-    if (data.lastUrl) {
-        iframe.src = data.lastUrl;
+    if (data.lastCambridgeUrl) {
+        iframe.src = data.lastCambridgeUrl;
 
         iframe.onload = () => {
             spinner.style.display = 'none';
@@ -14,12 +14,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         iframe.onerror = () => {
-             spinner.style.display = 'none';
-             container.innerHTML = '<p class="error">Impossible de charger la page. Vérifiez votre connexion internet.</p>';
+             handleError();
         };
+
+        setTimeout(() => {
+            if (spinner.style.display !== 'none') {
+                handleError();
+            }
+        }, 3000);
 
     } else {
         spinner.style.display = 'none';
-        container.innerHTML = '<p class="info">Sélectionnez du texte sur une page et utilisez le raccourci (Ctrl+Shift+W) ou le clic-droit pour faire une recherche.</p>';
+        container.innerHTML = '<p class="info">Sélectionnez du texte et utilisez le raccourci (Ctrl+Shift+W) pour faire une recherche.</p>';
     }
 });
+
+function handleError() {
+    const spinner = document.getElementById('spinner');
+    const container = document.getElementById('container');
+    spinner.style.display = 'none';
+    container.innerHTML = '<p class="error">Cambridge Dictionary n\'autorise pas la connexion dans cette fenêtre. Veuillez essayer la recherche via un nouvel onglet.</p>';
+}
