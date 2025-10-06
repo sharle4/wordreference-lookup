@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "WordReference Lookup",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Sélectionnez un mot pour le rechercher rapidement sur WordReference dans un pop-up ou un onglet.",
   "permissions": [
     "contextMenus",

@@ -57,7 +57,7 @@ function handleCommand(command, tab) {
             function: getSelectionOrWordUnderCursor
         }, (injectionResults) => {
             if (chrome.runtime.lastError) {
-                console.error(`Script injection failed: ${chrome.runtime.lastError.message}`);
+                console.warn(`Could not get selection programmatically. This page might be protected. Error: ${chrome.runtime.lastError.message}`);
                 return;
             }
             if (injectionResults && injectionResults[0] && injectionResults[0].result) {
@@ -97,7 +97,15 @@ async function processLookupRequest(text, tab) {
     const options = await getOptions();
     const lookupUrl = `https://www.wordreference.com/${options.langPair}/${encodeURIComponent(sanitizedText)}`;
 
-    switch (options.displayMode) {
+    let displayMode = options.displayMode;
+    const isTabInvalid = !tab || tab.id < 0;
+
+    if (isTabInvalid && displayMode === 'iframe') {
+        console.warn("Invalid tab context. Forcing fallback to 'popup' mode for this action.");
+        displayMode = 'popup';
+    }
+
+    switch (displayMode) {
         case 'iframe':
             await chrome.scripting.executeScript({
                 target: { tabId: tab.id },
